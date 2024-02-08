@@ -8,13 +8,30 @@ services:
     ports:
       - "8080:8080"
     labels:
-      - "webapp=varlogs"
+      webapp: varlogs
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
 
   grafana:
     image: grafana/grafana:latest
+    container_name: grafana
     ports:
-      - "9090:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin # Set your desired admin password
-    volumes:
-      - grafana-data:/var/lib/grafana
+      - "9090:9090"
+    depends_on:
+      - loki
+    networks:
+      - loki-network
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    ports:
+      - "3100:3100"
+    networks:
+      - loki-network
+
+networks:
+  loki-network:
+    driver: bridge

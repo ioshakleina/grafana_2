@@ -1,1 +1,20 @@
+version: "3"
 
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    labels:
+      - "webapp=varlogs"
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "9090:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin # Set your desired admin password
+    volumes:
+      - grafana-data:/var/lib/grafana

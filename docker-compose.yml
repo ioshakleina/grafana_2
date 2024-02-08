@@ -25,7 +25,7 @@ services:
       - loki-network
 
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki
     container_name: loki
     ports:
       - "3100:3100"
